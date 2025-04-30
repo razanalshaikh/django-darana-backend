@@ -10,10 +10,18 @@ from django.shortcuts import get_object_or_404
 
 class CitiesListAPI(APIView):
     permission_classes = [AllowAny]
+    # get city
     def get(self,request):
         cities = City.objects.all()
         serializer = CitySerializer(cities,many=True)
         return Response(serializer.data,status=200)
+    # post city
+    def post(self,request):
+        serializer = CitySerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CityDetailAPI(APIView):
     permission_classes = [AllowAny]
