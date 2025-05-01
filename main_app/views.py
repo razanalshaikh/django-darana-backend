@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.models import City
-from .serializers import CitySerializer
+from main_app.models import City, Feature
+from .serializers import CitySerializer,FeatureSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 
@@ -47,3 +47,10 @@ class CityDetailAPI(APIView):
             return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
     
+class FeatureListAPI(APIView):
+    permission_classes = [AllowAny]
+    
+    def get(self,request,pk):
+        features = Feature.objects.all().filter(city_id = pk)
+        serializer = FeatureSerializer(features, many = True)
+        return Response(serializer.data,status=200)
