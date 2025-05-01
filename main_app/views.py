@@ -33,3 +33,9 @@ class CityDetailAPI(APIView):
         city = self.get_object(pk)
         serializer = CitySerializer(city)
         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    def delete(self,request,pk):
+        city = self.get_object(pk)
+        city.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+    
