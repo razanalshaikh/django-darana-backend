@@ -39,3 +39,11 @@ class CityDetailAPI(APIView):
         city.delete()
         return Response(status=status.HTTP_202_ACCEPTED)
     
+    def patch(self,request,pk):
+        city = self.get_object(pk)
+        serializer = CitySerializer(city,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
