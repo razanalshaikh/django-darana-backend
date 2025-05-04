@@ -55,3 +55,14 @@ class FeatureListAPI(APIView):
         serializer = FeatureSerializer(features, many = True)
         return Response(serializer.data,status=200)
     
+    # def post(self,request,pk):
+    #     city = get_object_or_404(City,pk = pk)
+    #     data = request.data.copy() # make a copy
+    #     data['city'] = city.id
+
+    #     serializer = FeatureSerializer(data=data)
+    #     if serializer.is_valid(): 
+    #         serializer.save()
+    #         return Response(serializer.data,status=201)
+    #     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    

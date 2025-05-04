@@ -29,4 +29,19 @@ class Feature(models.Model):
     city = models.ForeignKey(City,on_delete=models.CASCADE)
     def __str__(self):
         return self.name
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=200)
+        
+class Place(models.Model):
+    name = models.CharField(max_length=200)
+    description = models.TextField()
+    image_url = models.CharField(max_length=255)
+    latitude = models.FloatField()
+    longitude = models.FloatField()
+    city = models.ForeignKey(City,on_delete=models.CASCADE)
+    categories = models.ManyToManyField(Category)
+
+
     
