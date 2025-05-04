@@ -54,3 +54,4 @@ class FeatureListAPI(APIView):
         features = Feature.objects.all().filter(city_id = pk)
         serializer = FeatureSerializer(features, many = True)
         return Response(serializer.data,status=200)
+    
