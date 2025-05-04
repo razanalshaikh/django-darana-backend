@@ -33,6 +33,9 @@ class Feature(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    
+    def __str__(self):
+        return self.name
         
 class Place(models.Model):
     name = models.CharField(max_length=200)
@@ -42,6 +45,8 @@ class Place(models.Model):
     longitude = models.FloatField()
     city = models.ForeignKey(City,on_delete=models.CASCADE)
     categories = models.ManyToManyField(Category)
-
+    
+    def __str__(self):
+        return self.name
 
     
