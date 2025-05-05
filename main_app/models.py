@@ -30,19 +30,14 @@ class Feature(models.Model):
     def __str__(self):
         return self.name
 
-# deleted if there's a time I will work on it
-# class Category(models.Model):
-#     name = models.CharField(max_length=200)
-    
-#     def __str__(self):
-#         return self.name
         
 CATEGORIES = (
     ('Nature', 'Nature'),
     ('Culture & History','Culture & History'),
     ('Shopping','Shopping'),
     ('Entertainment','Entertainment'),
-    ('Food & Beverages','Food & Beverages')
+    ('Food & Beverages','Food & Beverages'),
+    ('Adventure','Adventure'),
 )
 
 class Place(models.Model):
@@ -53,7 +48,7 @@ class Place(models.Model):
     category = models.CharField(
         max_length = 20,
         choices=CATEGORIES,
-        default= FEATURES[0][0]
+        default= CATEGORIES[0][0]
     )
 
     def __str__(self):

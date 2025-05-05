@@ -27,10 +27,3 @@ class PlaceSerializer(serializers.ModelSerializer):
         model = Place
         fields = '__all__'
 
-
-# deleted if there's a time I will work on it
-# class CatergorySerializer(serializers.ModelSerializer):
-    
-#     class Meta:
-#         model = Category
-#         fields = '__all__'

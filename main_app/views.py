@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.models import City, Feature, Place
+from main_app.models import CATEGORIES, City, Feature, Place
 from .serializers import CitySerializer,FeatureSerializer, PlaceSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
@@ -66,6 +66,7 @@ class FeatureListAPI(APIView):
             return Response(serializer.data,status=201)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
+
 class PlaceListAPI(APIView):
     permission_classes = [AllowAny]
     
@@ -79,7 +80,49 @@ class PlaceListAPI(APIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data,status=status.HTTP_201_CREATED)
-        # if anything happens, erorr then 400 bad request
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class PlaceListByCityAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self,request, city_id):
+        places = Place.objects.all().filter(city_id=city_id)
+        serializer = PlaceSerializer(places, many = True)
+        return Response(serializer.data,status=200)
+    
+    def get_object(self,pk):
+        return get_object_or_404(City,pk=pk)
+    
+class PlaceDetailAPI(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self,pk):
+        return get_object_or_404(Place,pk=pk)
+
+    def get(self,request,pk):
+        place = self.get_object(pk=pk)
+        serializer = PlaceSerializer(place)
+        return Response(serializer.data,status=status.HTTP_200_OK)        
+    
+    def patch(self,request,pk):
+        place = get_object_or_404(Place, pk=pk)
+        serializer = PlaceSerializer(place,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
         return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
 
-
+    def delete(self,request,pk):
+        place = get_object_or_404(Place,pk=pk)
+        place.delete()
+        return Response(status=status.HTTP_202_ACCEPTED)
+    
+# I found this suggested solution to get categories option to frontend 
+# https://stackoverflow.com/questions/74944828/django-rest-framework-get-all-options-for-choice-field
+class CatergoryChoicesList(APIView):
+    permission_classes = [AllowAny]
+    def get(self,request):
+        # I will do using list-comprehensions
+        choices = [category[0] for category in CATEGORIES ]
+        return Response(choices, status=status.HTTP_200_OK)
