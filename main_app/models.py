@@ -10,19 +10,19 @@ class City(models.Model):
         return self.name
         
 FEATURES = (
-    ('AD','Adventure'),
-    ('NT', 'Nature'),
-    ('CH','Culture & History'),
-    ('SH','Shopping'),
-    ('BR','Beauty & Relax'),
-    ('SP','Sports'),
-    ('ET','Entertainment'),
-    ('LS','Luxury')
+    ('Adventure','Adventure'),
+    ('Nature', 'Nature'),
+    ('Culture & History','Culture & History'),
+    ('Shopping','Shopping'),
+    ('Beauty & Relax','Beauty & Relax'),
+    ('Sports','Sports'),
+    ('Entertainment','Entertainment'),
+    ('Luxury','Luxury')
     )
     
 class Feature(models.Model):
     name = models.CharField(
-        max_length= 2,
+        max_length= 30,
         choices= FEATURES,
         default=FEATURES[0][0]
     )
@@ -30,22 +30,32 @@ class Feature(models.Model):
     def __str__(self):
         return self.name
 
-
-class Category(models.Model):
-    name = models.CharField(max_length=200)
+# deleted if there's a time I will work on it
+# class Category(models.Model):
+#     name = models.CharField(max_length=200)
     
-    def __str__(self):
-        return self.name
+#     def __str__(self):
+#         return self.name
         
+CATEGORIES = (
+    ('Nature', 'Nature'),
+    ('Culture & History','Culture & History'),
+    ('Shopping','Shopping'),
+    ('Entertainment','Entertainment'),
+    ('Food & Beverages','Food & Beverages')
+)
+
 class Place(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
     image_url = models.CharField(max_length=255)
-    latitude = models.FloatField()
-    longitude = models.FloatField()
     city = models.ForeignKey(City,on_delete=models.CASCADE)
-    categories = models.ManyToManyField(Category)
-    
+    category = models.CharField(
+        max_length = 20,
+        choices=CATEGORIES,
+        default= FEATURES[0][0]
+    )
+
     def __str__(self):
         return self.name
 

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.models import City, Feature
-from .serializers import CitySerializer,FeatureSerializer
+from main_app.models import City, Feature, Place
+from .serializers import CitySerializer,FeatureSerializer, PlaceSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.shortcuts import get_object_or_404
 
@@ -55,14 +55,31 @@ class FeatureListAPI(APIView):
         serializer = FeatureSerializer(features, many = True)
         return Response(serializer.data,status=200)
     
-    # def post(self,request,pk):
-    #     city = get_object_or_404(City,pk = pk)
-    #     data = request.data.copy() # make a copy
-    #     data['city'] = city.id
+    def post(self,request,pk):
+        city = get_object_or_404(City,pk = pk)
+        data = request.data.copy() # make a copy
+        data['city'] = city.pk
 
-    #     serializer = FeatureSerializer(data=data)
-    #     if serializer.is_valid(): 
-    #         serializer.save()
-    #         return Response(serializer.data,status=201)
-    #     return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        serializer = FeatureSerializer(data=data)
+        if serializer.is_valid(): 
+            serializer.save()
+            return Response(serializer.data,status=201)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+class PlaceListAPI(APIView):
+    permission_classes = [AllowAny]
     
+    def get(self,request):
+        places = Place.objects.all()
+        serializer = PlaceSerializer(places,many=True)
+        return Response(serializer.data,status=200)
+    
+    def post(self,request):
+        serializer = PlaceSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_201_CREATED)
+        # if anything happens, erorr then 400 bad request
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+

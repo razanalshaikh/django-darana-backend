@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import City, Feature
+from .models import FEATURES, City, Feature, Place
 
 class CitySerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,7 +11,7 @@ class CitySerializer(serializers.ModelSerializer):
 # https://stackoverflow.com/questions/49256851/how-to-serialize-tuples-in-django-rest-framework-or-is-there-any-way-to-conver
 
 class FeatureSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
+    name = serializers.ChoiceField(choices=FEATURES)
 
     class Meta:
         model = Feature
@@ -19,3 +19,18 @@ class FeatureSerializer(serializers.ModelSerializer):
     
     def get_name(self, obj):
         return obj.get_name_display()
+
+    
+class PlaceSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = Place
+        fields = '__all__'
+
+
+# deleted if there's a time I will work on it
+# class CatergorySerializer(serializers.ModelSerializer):
+    
+#     class Meta:
+#         model = Category
+#         fields = '__all__'
