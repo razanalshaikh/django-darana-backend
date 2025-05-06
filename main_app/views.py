@@ -4,9 +4,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from main_app.models import CATEGORIES, City, Feature, Place
 from .serializers import CitySerializer,FeatureSerializer, PlaceSerializer
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.shortcuts import get_object_or_404
 
+from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
+from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth.models import User
 
 class CitiesListAPI(APIView):
     permission_classes = [AllowAny]
@@ -126,3 +130,36 @@ class CatergoryChoicesList(APIView):
         # I will do using list-comprehensions
         choices = [category[0] for category in CATEGORIES ]
         return Response(choices, status=status.HTTP_200_OK)
+    
+
+# Add signup
+class SignUpView(APIView):
+    permission_classes = [AllowAny]
+    # When we recieve a POST request with username, email, and password. Create a new user.
+    def post(self, request):
+        # Using .get will not error if there's no username
+        username = request.data.get('username')
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            validate_password(password)
+        except ValidationError as err:
+            return Response({'error': err.messages}, status=400)
+
+        # Actually create the user
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        # create an access and refresh token for the user and send this in a response
+        tokens = RefreshToken.for_user(user)
+        return Response(
+            {
+                'refresh': str(tokens),
+                'access': str(tokens.access_token)
+            },
+            status=201
+        )
