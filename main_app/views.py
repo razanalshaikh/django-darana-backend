@@ -21,12 +21,15 @@ class CitiesListAPI(APIView):
         return Response(serializer.data,status=200)
     # post city
     def post(self,request):
-        serializer = CitySerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+        if request.user.is_staff:
+            serializer = CitySerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
 class CityDetailAPI(APIView):
     permission_classes = [AllowAny]
 
@@ -39,17 +42,23 @@ class CityDetailAPI(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
     
     def delete(self,request,pk):
-        city = self.get_object(pk)
-        city.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
-    
+        if request.user.is_staff:
+            city = self.get_object(pk)
+            city.delete()
+            return Response(status=status.HTTP_202_ACCEPTED)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
     def patch(self,request,pk):
-        city = self.get_object(pk)
-        serializer = CitySerializer(city,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_staff:
+            city = self.get_object(pk)
+            serializer = CitySerializer(city,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+        
     
 class FeatureListAPI(APIView):
     permission_classes = [AllowAny]
@@ -60,15 +69,18 @@ class FeatureListAPI(APIView):
         return Response(serializer.data,status=200)
     
     def post(self,request,pk):
-        city = get_object_or_404(City,pk = pk)
-        data = request.data.copy() # make a copy
-        data['city'] = city.pk
-
-        serializer = FeatureSerializer(data=data)
-        if serializer.is_valid(): 
-            serializer.save()
-            return Response(serializer.data,status=201)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        
+        if request.user.is_staff:
+                city = get_object_or_404(City,pk = pk)
+                data = request.data.copy() # make a copy
+                data['city'] = city.pk
+                serializer = FeatureSerializer(data=data)
+                if serializer.is_valid(): 
+                    serializer.save()
+                    return Response(serializer.data,status=201)
+                return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 
 class PlaceListAPI(APIView):
@@ -80,11 +92,14 @@ class PlaceListAPI(APIView):
         return Response(serializer.data,status=200)
     
     def post(self,request):
-        serializer = PlaceSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data,status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_staff:
+            serializer = PlaceSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data,status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
     
 
 class PlaceListByCityAPI(APIView):
@@ -110,18 +125,24 @@ class PlaceDetailAPI(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)        
     
     def patch(self,request,pk):
-        place = get_object_or_404(Place, pk=pk)
-        serializer = PlaceSerializer(place,data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        if request.user.is_staff:
+            place = get_object_or_404(Place, pk=pk)
+            serializer = PlaceSerializer(place,data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self,request,pk):
-        place = get_object_or_404(Place,pk=pk)
-        place.delete()
-        return Response(status=status.HTTP_202_ACCEPTED)
-    
+        if request.user.is_staff:
+                place = get_object_or_404(Place,pk=pk)
+                place.delete()
+                return Response(status=status.HTTP_202_ACCEPTED)
+        else:
+                return Response(status=status.HTTP_401_UNAUTHORIZED)
+
 # I found this suggested solution to get categories option to frontend 
 # https://stackoverflow.com/questions/74944828/django-rest-framework-get-all-options-for-choice-field
 class CatergoryChoicesList(APIView):
