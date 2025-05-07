@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from main_app.models import CATEGORIES, City, Feature, Place
+from main_app.models import CATEGORIES, City, Feature, Place, FEATURES
 from .serializers import CitySerializer,FeatureSerializer, PlaceSerializer
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.shortcuts import get_object_or_404
@@ -42,10 +42,10 @@ class CityDetailAPI(APIView):
         return Response(serializer.data,status=status.HTTP_200_OK)
     
     def delete(self,request,pk):
-        if request.user.is_staff:
+        if request.user.is_staff or  request.user.is_superuser:
             city = self.get_object(pk)
             city.delete()
-            return Response(status=status.HTTP_202_ACCEPTED)
+            return Response(status=status.HTTP_200_OK)
         else:
             return Response(status=status.HTTP_401_UNAUTHORIZED)
     def patch(self,request,pk):
@@ -136,12 +136,12 @@ class PlaceDetailAPI(APIView):
             return Response(status=status.HTTP_401_UNAUTHORIZED)
 
     def delete(self,request,pk):
-        if request.user.is_staff:
-                place = get_object_or_404(Place,pk=pk)
-                place.delete()
-                return Response(status=status.HTTP_202_ACCEPTED)
+        if request.user.is_staff or  request.user.is_superuser:
+            place = get_object_or_404(Place,pk=pk)
+            place.delete()
+            return Response(status=status.HTTP_200_OK)
         else:
-                return Response(status=status.HTTP_401_UNAUTHORIZED)
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
 
 # I found this suggested solution to get categories option to frontend 
 # https://stackoverflow.com/questions/74944828/django-rest-framework-get-all-options-for-choice-field
@@ -152,7 +152,6 @@ class CatergoryChoicesList(APIView):
         choices = [category[0] for category in CATEGORIES ]
         return Response(choices, status=status.HTTP_200_OK)
     
-
 # Add signup
 class SignUpView(APIView):
     permission_classes = [AllowAny]
