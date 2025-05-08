@@ -24,17 +24,18 @@ This repository contains the backend source code of the application, built using
 ## Tech Stack
 
 ### Languages & Frameworks
-- **Python** – Main programming language
-- **Django** – Web framework for building the backend
-- **Django REST Framework** – Toolkit for building Web APIs
+- **Python** – Main programming language.
+- **Django** – Web framework for building the backend.
+- **Django REST Framework** – Toolkit for building Web APIs.
 
 ### Libraries & Packages
-- **djangorestframework-simplejwt** – Handles JWT authentication
-- **psycopg2-binary** – PostgreSQL database adapter for Python
-- **django-cors-headers** – Manages Cross-Origin Resource Sharing (CORS)
+- **djangorestframework-simplejwt** – Handles JWT authentication.
+- **psycopg2-binary** – PostgreSQL database adapter for Python.
+- **django-cors-headers** – Manages Cross-Origin Resource Sharing (CORS).
 
 ### Tools & Services
-- **PostgreSQL** – Relational database used for storing application data
+- **PostgreSQL** – Relational database used for storing application data.
+- **Postman** - Used to test urls.
 ## ERD Diagram
 ![a picture of a ER diagram](assets/DaranaER.jpg)
 
