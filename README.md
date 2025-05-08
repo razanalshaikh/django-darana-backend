@@ -40,7 +40,7 @@ This repository contains the backend source code of the application, built using
 ![a picture of a ER diagram](assets/DaranaER.jpg)
 
 ## Frontend Repository
-You can find the backend code here: [Backend Repository Link](
+You can find the Frontend code here: [Frontend Repository Link](
   https://github.com/razanalshaikh/react-darana-frontend.git
 )
 ## RESTful Routing Table for both Client and Server
