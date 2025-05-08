@@ -19,7 +19,7 @@ This repository contains the backend source code of the application, built using
 
 - **`darana_project/`**  
   Django project configuration:
- - `settings.py` – Defines project settings including installed apps, middleware, database configuration, authentication, and more.
+    - `settings.py` – Defines project settings including installed apps, middleware, database configuration, authentication, and more.
 
 ## Tech Stack
 
