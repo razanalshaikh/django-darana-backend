@@ -33,14 +33,14 @@ This repository contains the backend source code of the application, built using
 - **psycopg2-binary** – PostgreSQL database adapter for Python.
 - **django-cors-headers** – Manages Cross-Origin Resource Sharing (CORS).
 
-### Tools & Services
+### Tools & ServicesC
 - **PostgreSQL** – Relational database used for storing application data.
 - **Postman** - Used to test urls.
 ## ERD Diagram
 ![a picture of a ER diagram](assets/DaranaER.jpg)
 
 ## Frontend Repository
-You can find the backend code here: [Backend Repository Link](
+You can find the frontend code here: [Frontend Repository Link](
     https://git.generalassemb.ly/razanalshaikh/react-darana-frontend.git
 )
 ## RESTful Routing Table for both Client and Server
