@@ -41,7 +41,7 @@ This repository contains the backend source code of the application, built using
 
 ## Frontend Repository
 You can find the frontend code here: [Frontend Repository Link](
-    https://git.generalassemb.ly/razanalshaikh/react-darana-frontend.git
+    https://github.com/razanalshaikh/react-darana-frontend.git
 )
 ## RESTful Routing Table for both Client and Server
 
@@ -83,7 +83,7 @@ You can find the frontend code here: [Frontend Repository Link](
 ## Installation Instructions
 ### Run Locally
 1. Clone the repository:  
-  ` git clone https://git.generalassemb.ly/razanalshaikh/django-darana-backend.git `
+  ` git clone https://github.com/razanalshaikh/django-darana-backend.git`
 2. Navigate to the project directory
     `cd django-darana-backend`
 3. Activate the virtual environment using pipenv
